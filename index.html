@@ -66,7 +66,69 @@ button,input,select,textarea{touch-action:manipulation}
  .match{gap:6px}
  .match-main span{font-size:10px}
 }
-@media(max-width:1100px){body{font-size:16px}.shell{padding-left:14px;padding-right:14px}.top{margin-left:-14px;margin-right:-14px}.hero{border-left:4px solid #d6a44d}.hero h2{font-size:23px}.quick-actions{display:grid;grid-template-columns:1fr 1fr}.quick-actions .btn{width:100%;min-height:54px}.match-main span{font-size:12px}.navitem{font-size:12px}.navitem.active{color:#b48431;font-weight:800}.scorepad button{min-height:74px}.section-title h3{font-size:18px}}@media(max-width:420px){.brand h1{font-size:15px}.hero img{width:60px;height:60px}.quick-actions .btn{font-size:13px;padding:10px 6px}}</style></head><body><div class="shell"><header class="top"><div class="brand"><img src="club-logo.png" alt="Donnybrook Cricket Club crest"><div><div class="eyebrow">Donnybrook Cricket Club</div><h1>Cooper's Cricket Journey</h1></div></div><button class="icon-btn" id="themeBtn" aria-label="Toggle light and dark mode">☾</button></header><main><section class="view active" id="home"><div class="hero"><div><div class="eyebrow" style="color:#e3b86d">Cooper · Donnybrook CC</div><h2>My cricket journey</h2><p>Every run. Every wicket. Every season.</p></div><img src="club-logo.png" alt="Club logo"></div><div class="tabs" id="seasonTabs"></div><div class="panel"><div class="stat-grid"><div class="stat"><b id="runsTotal">0</b><span>Runs</span></div><div class="stat"><b id="wicketsTotal">0</b><span>Wickets</span></div><div class="stat"><b id="catchesTotal">0</b><span>Catches</span></div><div class="stat"><b id="matchesTotal">0</b><span>Matches</span></div></div><div class="substats"><span>Highest score <strong id="highest">—</strong></span><span>Best bowling <strong id="bestBowling">—</strong></span><span>Runs / match <strong id="avgRuns">—</strong></span></div></div><div class="section-title"><h3>Recent matches</h3><button class="link" data-nav="matches">View all →</button></div><div class="panel" id="recentMatches"></div><div class="section-title"><h3>Record a performance</h3></div><div class="actions quick-actions"><button class="btn" id="newMatchHome">+ Add a match</button><button class="btn secondary" data-nav="live">Start live scoring</button></div></section>
+@media(max-width:1100px){body{font-size:16px}.shell{padding-left:14px;padding-right:14px}.top{margin-left:-14px;margin-right:-14px}.hero{border-left:4px solid #d6a44d}.hero h2{font-size:23px}.quick-actions{display:grid;grid-template-columns:1fr 1fr}.quick-actions .btn{width:100%;min-height:54px}.match-main span{font-size:12px}.navitem{font-size:12px}.navitem.active{color:#b48431;font-weight:800}.scorepad button{min-height:74px}.section-title h3{font-size:18px}}@media(max-width:420px){.brand h1{font-size:15px}.hero img{width:60px;height:60px}.quick-actions .btn{font-size:13px;padding:10px 6px}}
+/* Phone-first readable sizing: do not scale the desktop typography down */
+@media(max-width:1100px){
+ html{font-size:16px}
+ body{font-size:16px;line-height:1.45}
+ .shell{padding-left:16px;padding-right:16px;padding-bottom:calc(100px + env(safe-area-inset-bottom))}
+ .top{height:78px;margin-left:-16px;margin-right:-16px;padding:0 16px}
+ .brand{gap:12px}
+ .brand img{width:52px;height:52px}
+ .brand h1{font-size:19px;line-height:1.16;letter-spacing:-.3px}
+ .eyebrow{font-size:11px;letter-spacing:.65px;line-height:1.35}
+ .icon-btn{width:46px;height:46px;font-size:24px}
+ .hero{margin-top:16px;min-height:146px;padding:21px 18px;border-radius:15px}
+ .hero h2{font-size:27px;line-height:1.15}
+ .hero p{font-size:14px}
+ .hero img{width:76px;height:76px}
+ .tabs{margin:17px 0}
+ .tab,.pill{font-size:14px;padding:11px 15px}
+ .section-title{margin:24px 1px 12px}
+ .section-title h3{font-size:20px;letter-spacing:-.3px}
+ .link{font-size:14px}
+ .panel{border-radius:14px}
+ .stat{padding:20px 3px}
+ .stat b{font-size:clamp(27px,7.5vw,38px)}
+ .stat span{font-size:13px}
+ .substats{padding:16px 8px;gap:8px;font-size:12px}
+ .substats strong{font-size:15px}
+ .match{padding:17px 12px;gap:11px}
+ .datebox{width:48px}
+ .datebox b{font-size:19px}
+ .datebox span{font-size:11px}
+ .match-main b{font-size:16px}
+ .match-main span{font-size:13px}
+ .result{font-size:12px}
+ .empty{padding:34px 16px;font-size:15px;line-height:1.5}
+ .btn{font-size:15px;min-height:52px}
+ .quick-actions .btn{font-size:14px;min-height:58px}
+ .bottom-inner{min-height:72px}
+ .navitem{font-size:13px;min-height:70px;gap:5px;font-weight:700}
+ .navitem i{font-size:27px}
+ .form-grid{gap:13px}
+ .field label{font-size:14px}
+ .field input,.field select,.field textarea{font-size:16px;min-height:50px}
+ .notice{font-size:14px}
+ .small{font-size:14px}
+ .tag{font-size:12px}
+ .scorepad button{min-height:78px;font-size:28px}
+ .scorepad button.special{font-size:16px}
+ .metric{font-size:44px}
+ .mini-stat strong{font-size:31px}
+ .mini-stat span{font-size:14px}
+ .ball{min-width:41px;height:41px;font-size:15px}
+ .toast{font-size:14px}
+}
+@media(max-width:390px){
+ .brand h1{font-size:17px}
+ .hero h2{font-size:24px}
+ .hero img{width:62px;height:62px}
+ .stat b{font-size:26px}
+ .stat span{font-size:12px}
+ .quick-actions .btn{font-size:13px}
+}
+</style></head><body><div class="shell"><header class="top"><div class="brand"><img src="club-logo.png" alt="Donnybrook Cricket Club crest"><div><div class="eyebrow">Donnybrook Cricket Club</div><h1>Cooper's Cricket Journey</h1></div></div><button class="icon-btn" id="themeBtn" aria-label="Toggle light and dark mode">☾</button></header><main><section class="view active" id="home"><div class="hero"><div><div class="eyebrow" style="color:#e3b86d">Cooper · Donnybrook CC</div><h2>My cricket journey</h2><p>Every run. Every wicket. Every season.</p></div><img src="club-logo.png" alt="Club logo"></div><div class="tabs" id="seasonTabs"></div><div class="panel"><div class="stat-grid"><div class="stat"><b id="runsTotal">0</b><span>Runs</span></div><div class="stat"><b id="wicketsTotal">0</b><span>Wickets</span></div><div class="stat"><b id="catchesTotal">0</b><span>Catches</span></div><div class="stat"><b id="matchesTotal">0</b><span>Matches</span></div></div><div class="substats"><span>Highest score <strong id="highest">—</strong></span><span>Best bowling <strong id="bestBowling">—</strong></span><span>Runs / match <strong id="avgRuns">—</strong></span></div></div><div class="section-title"><h3>Recent matches</h3><button class="link" data-nav="matches">View all →</button></div><div class="panel" id="recentMatches"></div><div class="section-title"><h3>Record a performance</h3></div><div class="actions quick-actions"><button class="btn" id="newMatchHome">+ Add a match</button><button class="btn secondary" data-nav="live">Start live scoring</button></div></section>
 <section class="view" id="matches"><div class="section-title"><h3>Match history</h3><button class="btn" id="newMatch">+ New match</button></div><div class="panel" id="allMatches"></div></section>
 <section class="view" id="live"><div class="section-title"><h3>Live scoring</h3><span class="tag">Player-only mode</span></div><div class="notice"><strong>Scoring session:</strong> Record Cooper's deliveries here. This first version saves a completed batting session as a match entry; full-team scoring and Google Sheets syncing are next-stage features.</div><div class="section-title"><h3>Batting</h3><button class="link" id="resetLive">Reset</button></div><div class="panel" style="padding:18px"><div class="two-col"><div><div class="metric"><span id="liveRuns">0</span><span class="muted" style="font-size:19px;font-weight:500"> (<span id="liveBalls">0</span>)</span></div><div class="small muted">Runs (balls)</div></div><div><div class="metric" id="liveDismissals">0</div><div class="small muted">Dismissals</div></div></div><div class="substats" style="padding:14px 0 0;margin-top:16px"><span>Fours <strong id="liveFours">0</strong></span><span>Sixes <strong id="liveSixes">0</strong></span><span>Strike rate <strong id="liveSR">—</strong></span></div></div><div class="scorepad" id="scorepad"><button data-ball="0">0</button><button data-ball="1">1</button><button data-ball="2">2</button><button data-ball="3">3</button><button class="boundary" data-ball="4">4</button><button class="boundary" data-ball="6">6</button><button class="special" data-ball="W">OUT</button><button class="special" data-ball="E">Extra</button></div><div class="actions"><button class="btn secondary" id="undoBall">↶ Undo</button><button class="btn gold" id="saveLive">Save batting session</button></div><div class="section-title"><h3>Delivery history</h3></div><div class="panel" style="padding:15px"><div class="ball-history" id="ballHistory"><span class="muted small">No balls recorded.</span></div></div></section>
 <section class="view" id="stats"><div class="section-title"><h3>Career statistics</h3></div><div class="two-col"><div class="panel mini-stat"><strong id="statRuns">0</strong><span>Career runs</span></div><div class="panel mini-stat"><strong id="statWickets">0</strong><span>Career wickets</span></div><div class="panel mini-stat"><strong id="statFours">0</strong><span>Boundaries (fours)</span></div><div class="panel mini-stat"><strong id="statCatches">0</strong><span>Catches</span></div></div><div class="section-title"><h3>Runs by match</h3></div><div class="panel" style="padding:15px 16px 35px"><div class="chart" id="runsChart"></div></div><div class="section-title"><h3>Your data</h3></div><div class="panel" style="padding:17px"><p class="small muted">Export your match history as a JSON backup. This prototype currently saves data in this browser only.</p><div class="actions"><button class="btn secondary" id="exportData">Export backup</button><button class="btn secondary" id="importData">Import backup</button><input type="file" accept="application/json" id="importFile" hidden></div></div></section></main></div>
