@@ -68,6 +68,11 @@ function saveMatch(payload){
  if(payload.playCricketUrl){const u=String(payload.playCricketUrl);if(!/^https:\/\/(?:www\.)?(?:play\.cricket\.com\.au\/match\/[a-zA-Z0-9-]+\/?|playhq\.com\/cricket-australia\/[a-zA-Z0-9/_-]+\/?)(?:[?#][^\\s]*)?$/i.test(u))throw Error('Enter a valid PlayCricket or PlayHQ match URL')}
  const existing=readMatches_().find(m=>String(m.id)===id);
  const rowObj=Object.assign({},existing||{},payload,{id,updatedAt:new Date().toISOString()});
+ // Live deliveries are authoritative for live-sourced fields; stale editor form values must not overwrite them.
+ if(existing&&existing.fieldSources){
+  const liveFields=['runs','balls','dismissals','fours','sixes','wickets','conceded','bowlingBalls'];
+  liveFields.forEach(k=>{if(existing.fieldSources[k]==='live'){rowObj[k]=existing[k];rowObj.fieldSources=Object.assign({},rowObj.fieldSources||{},{[k]:'live'});rowObj.unknownFields=(rowObj.unknownFields||[]).filter(x=>x!==k)}});
+ }
  const row=head.map(k=>{
   let v=rowObj[k]??'';
   if(['unknownFields','fieldSources','scorecardSnapshot'].includes(k))return JSON.stringify(v|| (k==='unknownFields'?[]:{}));
@@ -128,7 +133,7 @@ function syncLiveSession(matchId,events){
    }else{
     if(typeof e.value==='number'){t.conceded+=e.value;t.bowlingBalls++}
     else if(e.value==='wicket'){t.wickets++;t.bowlingBalls++}
-    else if(e.value==='wide'||e.value==='noball')t.conceded++;
+    else if(e.value==='wide'||e.value==='noball'){t.conceded++;t.bowlingBalls++;}
     else if(e.value==='bye'||e.value==='legbye')t.bowlingBalls++;
    }
   });
