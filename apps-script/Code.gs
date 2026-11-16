@@ -145,7 +145,7 @@ function syncLiveSession(matchId,events){
   let sources={};
   try{sources=JSON.parse(matchSheet.getRange(row,sourcesCol).getValue()||'{}')}catch{}
   Object.keys(t).forEach(k=>{
-   if((sides.has('bat')&&['runs','balls','dismissals','fours','sixes'].includes(k))||(sides.has('bowl')&&['wickets','conceded','bowlingBalls'].includes(k))){
+   if((sides.has('bat')&&['runs','balls','dismissals','fours','sixes'].includes(k))||(sides.has('bowl')&&['wickets','conceded','bowlingBalls'].includes(k))||sources[k]==='live'){
     const c=head.indexOf(k)+1;if(c>0)matchSheet.getRange(row,c).setValue(t[k]);
     unknown=unknown.filter(x=>x!==k);sources[k]='live';
    }
