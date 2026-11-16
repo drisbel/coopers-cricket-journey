@@ -65,7 +65,7 @@ function saveMatch(payload){
  if(!String(payload.opponent||'').trim()||!/^\d{4}-\d{2}-\d{2}$/.test(String(payload.matchDate||'')))throw Error('Opponent and match date required');
  const allowed=['manual','awaiting','review','verified','complete','incomplete','inprogress'];
  if(payload.recordStatus&&!allowed.includes(payload.recordStatus))throw Error('Invalid status');
- if(payload.playCricketUrl){const u=String(payload.playCricketUrl);if(!/^https:\/\/(www\.)?play\.cricket\.com\.au\/match\/[a-zA-Z0-9-]+\/?$/.test(u))throw Error('Invalid PlayCricket URL')}
+ if(payload.playCricketUrl){const u=String(payload.playCricketUrl);if(!/^https:\/\/(?:www\.)?(?:play\.cricket\.com\.au\/match\/[a-zA-Z0-9-]+\/?|playhq\.com\/cricket-australia\/[a-zA-Z0-9/_-]+\/?)(?:[?#][^\\s]*)?$/i.test(u))throw Error('Enter a valid PlayCricket or PlayHQ match URL')}
  const existing=readMatches_().find(m=>String(m.id)===id);
  const rowObj=Object.assign({},existing||{},payload,{id,updatedAt:new Date().toISOString()});
  const row=head.map(k=>{
