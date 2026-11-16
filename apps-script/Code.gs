@@ -47,7 +47,7 @@ function doGet(e){
  // Editor UI is accessible only on the separate editor deployment.
  if(p.action==='editor'){
   assertEditor_();
-  return HtmlService.createHtmlOutputFromFile('Editor').setTitle("Cooper's Cricket Journey — Editor").addMetaTag('viewport','width=device-width,initial-scale=1');
+  return HtmlService.createHtmlOutputFromFile('Editor').setTitle("Cooper's Cricket Journey — Editor").addMetaTag('viewport','width=device-width,initial-scale=1').setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
  }
  return output_({ok:false,error:'Unknown action'});
 }
