@@ -84,3 +84,75 @@ function saveMatch(payload){
  }finally{lock.releaseLock()}
  return {ok:true,id};
 }
+
+/** Private live scoring. A complete event snapshot is written atomically under a script lock.
+ * The client sends one request at a time; retrying the same snapshot is safe.
+ */
+function liveSession(matchId){
+ assertEditor_();
+ const id=String(matchId||'');
+ if(!readMatches_().some(m=>String(m.id)===id))throw Error('Match not found');
+ const sh=db_().getSheetByName('Deliveries');
+ if(sh.getLastRow()<2)return [];
+ const rows=sh.getRange(2,1,sh.getLastRow()-1,12).getValues();
+ return rows.filter(r=>String(r[1])===id && String(r[2])==='cooper').map(r=>{
+  try{return JSON.parse(String(r[9]||'{}'))}catch{return null}
+ }).filter(Boolean);
+}
+function syncLiveSession(matchId,events){
+ assertEditor_();
+ const id=String(matchId||'');
+ if(!Array.isArray(events)||events.length>1000)throw Error('Invalid scoring session');
+ if(!readMatches_().some(m=>String(m.id)===id))throw Error('Save the match details first');
+ const clean=events.map((e,i)=>{
+  if(!e||!['bat','bowl'].includes(e.side)||!(typeof e.value==='number'&&[0,1,2,3,4,5,6].includes(e.value)||['out','extra','wide','noball','wicket','bye','legbye'].includes(e.value)))throw Error('Invalid delivery '+i);
+  return {id:String(e.id||Utilities.getUuid()).slice(0,100),side:e.side,value:e.value};
+ });
+ const lock=LockService.getScriptLock();lock.waitLock(20000);
+ try{
+  const sh=db_().getSheetByName('Deliveries');
+  const all=sh.getLastRow()>1?sh.getRange(2,1,sh.getLastRow()-1,12).getValues():[];
+  const keep=all.filter(r=>!(String(r[1])===id&&String(r[2])==='cooper'));
+  if(all.length)sh.getRange(2,1,all.length,12).clearContent();
+  const now=new Date().toISOString();
+  const added=clean.map((e,i)=>[e.id,id,'cooper',Math.floor(i/6)+1,i%6+1,e.side==='bat'?'cooper':'',e.side==='bowl'?'cooper':'',typeof e.value==='number'?e.value:0,e.side,JSON.stringify(e),'',now]);
+  const rows=keep.concat(added);
+  if(rows.length)sh.getRange(2,1,rows.length,12).setValues(rows);
+  const t={runs:0,balls:0,dismissals:0,fours:0,sixes:0,wickets:0,conceded:0,bowlingBalls:0};
+  const sides=new Set();
+  clean.forEach(e=>{
+   sides.add(e.side);
+   if(e.side==='bat'){
+    if(typeof e.value==='number'){t.runs+=e.value;t.balls++;if(e.value===4)t.fours++;if(e.value===6)t.sixes++}
+    else if(e.value==='out'){t.dismissals++;t.balls++}
+   }else{
+    if(typeof e.value==='number'){t.conceded+=e.value;t.bowlingBalls++}
+    else if(e.value==='wicket'){t.wickets++;t.bowlingBalls++}
+    else if(e.value==='wide'||e.value==='noball')t.conceded++;
+    else if(e.value==='bye'||e.value==='legbye')t.bowlingBalls++;
+   }
+  });
+  const matchSheet=db_().getSheetByName('Matches');
+  const ids=matchSheet.getRange(2,1,matchSheet.getLastRow()-1,1).getValues().flat();
+  const index=ids.findIndex(x=>String(x)===id);
+  if(index<0)throw Error('Match not found');
+  const head=matchSheet.getRange(1,1,1,matchSheet.getLastColumn()).getValues()[0];
+  const row=index+2;
+  const unknownCol=head.indexOf('unknownFields')+1;
+  let unknown=[];
+  try{unknown=JSON.parse(matchSheet.getRange(row,unknownCol).getValue()||'[]')}catch{}
+  const sourcesCol=head.indexOf('fieldSources')+1;
+  let sources={};
+  try{sources=JSON.parse(matchSheet.getRange(row,sourcesCol).getValue()||'{}')}catch{}
+  Object.keys(t).forEach(k=>{
+   if((sides.has('bat')&&['runs','balls','dismissals','fours','sixes'].includes(k))||(sides.has('bowl')&&['wickets','conceded','bowlingBalls'].includes(k))){
+    const c=head.indexOf(k)+1;if(c>0)matchSheet.getRange(row,c).setValue(t[k]);
+    unknown=unknown.filter(x=>x!==k);sources[k]='live';
+   }
+  });
+  matchSheet.getRange(row,unknownCol).setValue(JSON.stringify(unknown));
+  matchSheet.getRange(row,sourcesCol).setValue(JSON.stringify(sources));
+  matchSheet.getRange(row,head.indexOf('updatedAt')+1).setValue(now);
+  return {ok:true,count:clean.length,totals:t};
+ }finally{lock.releaseLock()}
+}
