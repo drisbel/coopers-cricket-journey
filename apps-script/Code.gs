@@ -11,7 +11,7 @@
 const TABS = {
  Players:['id','name','club','createdAt'],
  Seasons:['id','label','ageGroup','notes'],
- Matches:['id','opponent','matchDate','season','venue','teamOvers','ballAllocation','runs','balls','dismissals','fours','sixes','wickets','conceded','bowlingBalls','catches','runouts','result','notes','playCricketUrl','recordStatus','unknownFields','fieldSources','scorecardSnapshot','updatedAt'],
+ Matches:['id','opponent','matchDate','season','venue','teamOvers','ballAllocation','runs','balls','dismissals','fours','sixes','wickets','conceded','bowlingBalls','catches','runouts','result','notes','playCricketUrl','recordStatus','unknownFields','fieldSources','scorecardSnapshot','updatedAt','ourScore','ourWickets','opponentScore','opponentWickets','scorecardAvailability'],
  Deliveries:['id','matchId','innings','overNumber','ballNumber','batterId','bowlerId','runs','extrasType','extrasRuns','wicketType','createdAt'],
  ScorecardSources:['id','matchId','url','sourceType','status','checkedAt','snapshot'],
  AuditLog:['id','matchId','action','editor','at']
