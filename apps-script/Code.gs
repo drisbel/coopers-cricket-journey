@@ -44,6 +44,11 @@ function output_(obj,callback){
 function doGet(e){
  const p=e&&e.parameter||{};
  if(p.action==='publicMatches')return output_({ok:true,matches:readMatches_()},p.callback);
+ if(p.action==='matches'||p.action==='scoring'){
+  assertEditor_();
+  const name=p.action==='matches'?'MatchEditor':'LiveScorer';
+  return HtmlService.createHtmlOutputFromFile(name).setTitle("Cooper's Cricket Journey — "+(p.action==='matches'?'Match Editor':'Live Scorer')).addMetaTag('viewport','width=device-width,initial-scale=1').setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
+ }
  // Editor UI is accessible only on the separate editor deployment.
  if(p.action==='editor'){
   assertEditor_();
