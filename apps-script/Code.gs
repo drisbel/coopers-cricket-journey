@@ -44,6 +44,15 @@ function output_(obj,callback){
 function doGet(e){
  const p=e&&e.parameter||{};
  if(p.action==='publicMatches')return output_({ok:true,matches:readMatches_()},p.callback);
+ if(p.action==='publicDeliveries'){
+  const id=String(p.matchId||'');
+  if(!/^[a-zA-Z0-9_-]{1,100}$/.test(id))return output_({ok:false,error:'Invalid match'},p.callback);
+  if(!readMatches_().some(m=>String(m.id)===id))return output_({ok:false,error:'Match not found'},p.callback);
+  const sh=db_().getSheetByName('Deliveries');
+  const rows=sh&&sh.getLastRow()>1?sh.getRange(2,1,sh.getLastRow()-1,12).getValues():[];
+  const events=rows.filter(r=>String(r[1])===id&&String(r[2])==='cooper').map(r=>{try{const e=JSON.parse(String(r[9]||'{}'));return ['bat','bowl'].includes(e.side)?{side:e.side,value:e.value}:null}catch{return null}}).filter(Boolean);
+  return output_({ok:true,events},p.callback);
+ }
  if(p.action==='matches'||p.action==='scoring'){
   assertEditor_();
   const name=p.action==='matches'?'MatchEditor':'LiveScorer';
